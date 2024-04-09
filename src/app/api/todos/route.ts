@@ -1,6 +1,6 @@
 // rag
 import prisma from "@/app/lib/prisma";
-import { NextResponse, NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -33,4 +33,11 @@ export async function GET(request: Request) {
   //     skip: +skip,
   //   });
   return NextResponse.json(todos);
+}
+
+export async function POST(request: Request) {
+  const body = await request.json();
+
+  const todo = await prisma.todo.create({ data: body });
+  return NextResponse.json(todo);
 }

@@ -1,6 +1,7 @@
 // rag
 import prisma from "@/app/lib/prisma";
 import { NextResponse } from "next/server";
+import * as yup from "yup"
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -34,6 +35,10 @@ export async function GET(request: Request) {
   //   });
   return NextResponse.json(todos);
 }
+
+const postSchema=yup.object({
+  
+})
 
 export async function POST(request: Request) {
   const body = await request.json();

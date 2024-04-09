@@ -13,6 +13,7 @@ npx prisma generate
 ```
 2. Renombrar el .env.template a .env
 3. Reemplazar las variables de entorno
+4. Ejecutar el seed [para crear la base de datos local](localhost:3000/api/seed)
 
 # Prod
 

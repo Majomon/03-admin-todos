@@ -1,6 +1,5 @@
-export const dynamic="force-dynamic"
+export const dynamic = 'force-dynamic'
 export const revalidate = 0
-
 
 import prisma from "@/app/lib/prisma";
 import { NewTodo, TodosGrids } from "@/todos";
@@ -12,6 +11,8 @@ export const metadata = {
 
 export default async function ServerTodosPage() {
   const todos = await prisma.todo.findMany();
+  console.log("Construido");
+
   return (
     <>
       <span className="text-3xl mb-10">Server Actions</span>

@@ -11,8 +11,12 @@ interface Segments {
 
 const getTodo = async (id: string): Promise<Todo | null> => {
   const todoId = await prisma.todo.findFirst({ where: { id } });
-
   return todoId;
+};
+
+const deleteTodo = async (id: string) => {
+  const deleteTodoId = await prisma.todo.deleteMany({ where: { id } });
+  return deleteTodoId;
 };
 
 /* GET */
@@ -58,4 +62,17 @@ export async function PUT(request: Request, { params }: Segments) {
   } catch (error) {
     return NextResponse.json(error, { status: 400 });
   }
+}
+
+/* DELETE TODO ID*/
+export async function DELETE(request: Request, { params }: Segments) {
+  const todoId = await deleteTodo(params.id);
+
+  if (!todoId) {
+    return NextResponse.json(
+      { message: `Todo con ID: ${params.id} no existe` },
+      { status: 404 }
+    );
+  }
+  return NextResponse.json(todoId);
 }

@@ -19,4 +19,22 @@ export async function GET(request: Request, { params }: Segments) {
   return NextResponse.json(todoId);
 }
 
+export async function PUT(request: Request, { params }: Segments) {
+  const { id } = params;
+  const todoId = await prisma.todo.findFirst({ where: { id } });
+
+  if (!todoId) {
+    return NextResponse.json(
+      { message: `Todo con ID: ${id} no existe` },
+      { status: 404 }
+    );
+  }
+
+  const body = await request.json();
+  const updateTodo = await prisma.todo.update({
+    where: { id },
+    data: { ...body },
+  });
   
+  return NextResponse.json(updateTodo);
+}

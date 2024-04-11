@@ -4,7 +4,11 @@
 import Image from "next/image";
 import { IoAddCircleOutline, IoTrashOutline } from "react-icons/io5";
 import { Star } from "./Star";
-import { addProductToCart } from "@/shopping-cart/actions/actions";
+import {
+  addProductToCart,
+  removeProductFromCart,
+} from "@/shopping-cart/actions/actions";
+import { useRouter } from "next/navigation";
 
 interface Props {
   id: string;
@@ -15,12 +19,20 @@ interface Props {
 }
 
 export const ProductCard = ({ id, image, name, price, rating }: Props) => {
+  const router = useRouter();
+
   const onAddToCart = () => {
     addProductToCart(id);
+    router.refresh();
+  };
+
+  const onRemoveFromCart = () => {
+    removeProductFromCart(id);
+    router.refresh();
   };
 
   return (
-    <div className="shadow rounded-lg max-w-sm bg-gray-800 border-gray-100">
+    <div className="max-w-sm rounded-lg border-gray-100 bg-gray-800 shadow">
       {/* Product Image */}
       <div className="p-2">
         <Image
@@ -35,11 +47,11 @@ export const ProductCard = ({ id, image, name, price, rating }: Props) => {
       {/* Title */}
       <div className="px-5 pb-5">
         <a href="#">
-          <h3 className=" font-semibold text-xl tracking-tight text-white">
+          <h3 className=" text-xl font-semibold tracking-tight text-white">
             {name}
           </h3>
         </a>
-        <div className="flex items-center mt-2.5 mb-5">
+        <div className="mb-5 mt-2.5 flex items-center">
           {/* Stars */}
           {Array(rating)
             .fill(0)
@@ -48,23 +60,28 @@ export const ProductCard = ({ id, image, name, price, rating }: Props) => {
             ))}
 
           {/* Rating Number */}
-          <span className=" text-xs font-semibold mr-2 px-2.5 py-0.5 rounded bg-blue-200 text-blue-800 ml-3">
+          <span className=" ml-3 mr-2 rounded bg-blue-200 px-2.5 py-0.5 text-xs font-semibold text-blue-800">
             {rating.toFixed(2)}
           </span>
         </div>
 
         {/* Price and Add to Cart */}
         <div className="flex items-center justify-between">
-          <span className="text-3xl font-bold text-white">${price}</span>
+          <span className="text-2xl font-bold text-white">
+            ${price.toFixed(2)}
+          </span>
 
           <div className="flex">
             <button
               onClick={onAddToCart}
-              className="text-white mr-2  focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-800"
+              className="mr-2 rounded-lg  bg-blue-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-700 focus:ring-4 focus:ring-blue-800"
             >
               <IoAddCircleOutline size={25} />
             </button>
-            <button className="text-white focus:ring-4  font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-red-600 hover:bg-red-700 focus:ring-red-800">
+            <button
+              onClick={onRemoveFromCart}
+              className="rounded-lg bg-red-600  px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-red-700 focus:ring-4 focus:ring-red-800"
+            >
               <IoTrashOutline size={20} />
             </button>
           </div>

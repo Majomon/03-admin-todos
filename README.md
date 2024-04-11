@@ -33,5 +33,7 @@ En la version actual de prisma, nextj y next-auth -> Tube que borrar el middlewa
     "next": "14.1.4",
     "next-auth": "^5.0.0-beta.16",
     "prisma": "^5.12.1",
+
+    https://authjs.dev/getting-started/adapters/prisma
 ``` 
 

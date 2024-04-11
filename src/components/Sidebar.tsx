@@ -9,6 +9,7 @@ import {
   IoCodeWorkingOutline,
   IoListOutline,
 } from "react-icons/io5";
+import { auth } from "../auth";
 
 const menuItem = [
   { icon: <IoCalendarOutline />, title: "Dashboard", path: "/dashboard" },
@@ -33,14 +34,25 @@ const menuItem = [
     path: "/dashboard/products",
   },
 ];
-export const Sidebar = () => {
+export const Sidebar = async () => {
+  const session = await auth();
+
+  const userName = session?.user?.name || "No name";
+  const userAvatar =
+    session?.user?.image ||
+    "https://tailus.io/sources/blocks/stats-cards/preview/images/second_user.webp";
+  //TODO: const userRol = session?.user?.name || "No name";
+
+
   return (
-    <aside className="ml-[-100%] fixed z-10 top-0 pb-3 px-6 w-full flex flex-col justify-between h-screen border-r bg-white transition duration-300 md:w-4/12 lg:ml-0 lg:w-[25%] xl:w-[20%] 2xl:w-[15%]">
+    <aside className="fixed top-0 z-10 ml-[-100%] flex h-screen w-full flex-col justify-between border-r bg-white px-6 pb-3 transition duration-300 md:w-4/12 lg:ml-0 lg:w-[25%] xl:w-[20%] 2xl:w-[15%]">
       <div>
         <div className="-mx-6 px-6 py-4">
           <Link href="#" title="home">
             <Image
-              src="https://tailus.io/sources/blocks/stats-cards/preview/images/logo.svg"
+              src={
+                "https://tailus.io/sources/blocks/stats-cards/preview/images/logo.svg"
+              }
               className="w-32"
               alt="tailus logo"
               width={150}
@@ -51,27 +63,28 @@ export const Sidebar = () => {
 
         <div className="mt-8 text-center">
           <Image
-            src="https://tailus.io/sources/blocks/stats-cards/preview/images/second_user.webp"
-            alt=""
-            className="w-10 h-10 m-auto rounded-full object-cover lg:w-28 lg:h-28"
+            src={userAvatar}
+            className="m-auto h-10 w-10 rounded-full object-cover lg:h-28 lg:w-28"
+            alt="tailus logo"
             width={150}
             height={150}
           />
-          <h5 className="hidden mt-4 text-xl font-semibold text-gray-600 lg:block">
-            Cynthia J. Watts
+
+          <h5 className="mt-4 hidden text-xl font-semibold text-gray-600 lg:block">
+            {userName}
           </h5>
           <span className="hidden text-gray-400 lg:block">Admin</span>
         </div>
 
-        <ul className="space-y-2 tracking-wide mt-8">
+        <ul className="mt-8 space-y-2 tracking-wide">
           {menuItem.map((item) => (
             <SidebarItem key={item.path} {...item} />
           ))}
         </ul>
       </div>
 
-      <div className="px-6 -mx-6 pt-4 flex justify-between items-center border-t">
-        <button className="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group">
+      <div className="-mx-6 flex items-center justify-between border-t px-6 pt-4">
+        <button className="group flex items-center space-x-4 rounded-md px-4 py-3 text-gray-600">
           <CiLogout />
           <span className="group-hover:text-gray-700">Logout</span>
         </button>

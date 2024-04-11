@@ -16,6 +16,7 @@ export const TabBar = ({
 }: Props) => {
   const [selected, setSelected] = useState(currentTab);
 
+
   const onTabSelected = (tab: number) => {
     setSelected(tab);
     setCookie("selectedTab", tab.toString());

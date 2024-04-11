@@ -8,6 +8,7 @@ import {
   IoCheckboxOutline,
   IoCodeWorkingOutline,
   IoListOutline,
+  IoPersonOutline
 } from "react-icons/io5";
 import { auth } from "../auth";
 
@@ -33,6 +34,11 @@ const menuItem = [
     title: "Productos",
     path: "/dashboard/products",
   },
+  {
+    icon: <IoPersonOutline />,
+    title: "Perfil",
+    path: "/dashboard/profile",
+  },
 ];
 export const Sidebar = async () => {
   const session = await auth();
@@ -42,7 +48,6 @@ export const Sidebar = async () => {
     session?.user?.image ||
     "https://tailus.io/sources/blocks/stats-cards/preview/images/second_user.webp";
   //TODO: const userRol = session?.user?.name || "No name";
-
 
   return (
     <aside className="fixed top-0 z-10 ml-[-100%] flex h-screen w-full flex-col justify-between border-r bg-white px-6 pb-3 transition duration-300 md:w-4/12 lg:ml-0 lg:w-[25%] xl:w-[20%] 2xl:w-[15%]">

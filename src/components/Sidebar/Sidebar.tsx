@@ -1,4 +1,4 @@
-import { SidebarItem } from "@/components";
+import { LogoutButton, SidebarItem } from "@/components";
 import Image from "next/image";
 import Link from "next/link";
 import { CiLogout } from "react-icons/ci";
@@ -8,9 +8,9 @@ import {
   IoCheckboxOutline,
   IoCodeWorkingOutline,
   IoListOutline,
-  IoPersonOutline
+  IoPersonOutline,
 } from "react-icons/io5";
-import { auth } from "../auth";
+import { auth } from "../../auth";
 
 const menuItem = [
   { icon: <IoCalendarOutline />, title: "Dashboard", path: "/dashboard" },
@@ -89,10 +89,7 @@ export const Sidebar = async () => {
       </div>
 
       <div className="-mx-6 flex items-center justify-between border-t px-6 pt-4">
-        <button className="group flex items-center space-x-4 rounded-md px-4 py-3 text-gray-600">
-          <CiLogout />
-          <span className="group-hover:text-gray-700">Logout</span>
-        </button>
+        <LogoutButton />
       </div>
     </aside>
   );

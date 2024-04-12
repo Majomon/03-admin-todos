@@ -13,6 +13,9 @@ model Todo {
   complete    Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  userId      String?
+
+  user User? @relation(fields: [userId], references: [id])
 }
 
 // Auth.js
@@ -34,7 +37,7 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
-  @@map("accounts")
+  // @@map("accounts")
 }
 
 model Session {
@@ -44,7 +47,7 @@ model Session {
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@map("sessions")
+  // @@map("sessions")
 }
 
 model User {
@@ -60,7 +63,10 @@ model User {
   accounts Account[]
   sessions Session[]
 
-  @@map("users")
+  //! Relaciones
+  todos Todo[]
+
+  // @@map("users")
 }
 
 model VerificationToken {
@@ -69,5 +75,5 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
-  @@map("verificationtokens")
+  // @@map("verificationtokens")
 }

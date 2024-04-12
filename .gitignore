@@ -3,6 +3,7 @@
 .env
 # dependencies
 /node_modules
+/prisma
 /.pnp
 .pnp.js
 .yarn/install-state.gz

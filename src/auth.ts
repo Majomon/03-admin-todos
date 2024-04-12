@@ -6,10 +6,45 @@ import NextAuth from "next-auth";
 import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 import prisma from "./app/lib/prisma";
+import CredentialsProvider from "next-auth/providers/credentials";
+import { signInEmailPassword } from "./app/auth/actions/auth-actions";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
-  providers: [GitHub, Google],
+  providers: [
+    GitHub,
+    Google,
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {
+        email: {
+          label: "Correo electrónico",
+          type: "email",
+          placeholder: "usuario@mail.com",
+        },
+        password: {
+          label: "Contraseña",
+          type: "password",
+          placeholder: "******",
+        },
+      },
+      async authorize(credentials, req) {
+        console.log(credentials);
+
+        // Add logic here to look up the user from the credentials supplied
+        const user = await signInEmailPassword(
+          credentials!.email,
+          credentials!.password,
+        );
+        if (user) {
+          // Any object returned will be saved in `user` property of the JWT
+          return user;
+        }
+        return null;
+      },
+    }),
+  ],
+
   session: {
     strategy: "jwt",
   },

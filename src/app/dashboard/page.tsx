@@ -3,11 +3,11 @@ import { auth } from "../../auth";
 import { redirect } from "next/navigation";
 // prc
 export default async function DashboardPage() {
-  const session = await auth();
+/*   const session = await auth();
 
   if (!session?.user) {
     redirect("/api/auth/signin");
-  }
+  } */
 
   return (
     <div className="grid grid-cols-1 gap-6">
@@ -16,7 +16,7 @@ export default async function DashboardPage() {
           {/* <span>{session?.user?.name}</span>
           <span>{session?.user?.image}</span>
           <span>{session?.user?.email}</span> */}
-          <div>{JSON.stringify(session)}</div>
+          {/* <div>{JSON.stringify(session)}</div> */}
         </div>
       </WidgetItem>
     </div>

@@ -29,8 +29,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         },
       },
       async authorize(credentials, req) {
-        console.log(credentials);
-
         // Add logic here to look up the user from the credentials supplied
         const user = await signInEmailPassword(
           credentials!.email,

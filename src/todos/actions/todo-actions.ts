@@ -1,5 +1,6 @@
 "use server";
 
+import { getServerSession } from "@/app/auth/actions/auth-actions";
 import prisma from "@/app/lib/prisma";
 import { Todo } from "@prisma/client";
 import { revalidatePath } from "next/cache";
@@ -14,7 +15,7 @@ export const sleet = async (seconds: number) => {
 
 export const toggleTodo = async (
   id: string,
-  complete: boolean
+  complete: boolean,
 ): Promise<Todo> => {
   await sleet(3);
   const todo = await prisma.todo.findFirst({ where: { id } });
@@ -33,8 +34,12 @@ export const toggleTodo = async (
 };
 
 export const addTodo = async (description: string) => {
+  const user = await getServerSession();
+
   try {
-    const todo = await prisma.todo.create({ data: { description } });
+    const todo = await prisma.todo.create({
+      data: { description, userId: user?.id },
+    });
     revalidatePath("/dashboard/server-todos");
     return todo;
   } catch (error) {

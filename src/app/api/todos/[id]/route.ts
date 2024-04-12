@@ -1,3 +1,4 @@
+import { getServerSession } from "@/app/auth/actions/auth-actions";
 import prisma from "@/app/lib/prisma";
 import { Todo } from "@prisma/client";
 import { NextResponse } from "next/server";
@@ -10,7 +11,17 @@ interface Segments {
 }
 
 const getTodo = async (id: string): Promise<Todo | null> => {
+  const user = await getServerSession();
+
+  if (!user) {
+    return null;
+  }
   const todoId = await prisma.todo.findFirst({ where: { id } });
+
+  if (todoId?.userId !== user.id) {
+    return null;
+  }
+
   return todoId;
 };
 
@@ -26,7 +37,7 @@ export async function GET(request: Request, { params }: Segments) {
   if (!todoId) {
     return NextResponse.json(
       { message: `Todo con ID: ${params.id} no existe` },
-      { status: 404 }
+      { status: 404 },
     );
   }
   return NextResponse.json(todoId);
@@ -44,13 +55,13 @@ export async function PUT(request: Request, { params }: Segments) {
   if (!todoId) {
     return NextResponse.json(
       { message: `Todo con ID: ${params.id} no existe` },
-      { status: 404 }
+      { status: 404 },
     );
-  }
+  } 
 
   try {
     const { complete, description } = await putSchema.validate(
-      await request.json()
+      await request.json(),
     );
 
     const updateTodo = await prisma.todo.update({
@@ -71,7 +82,7 @@ export async function DELETE(request: Request, { params }: Segments) {
   if (!todoId) {
     return NextResponse.json(
       { message: `Todo con ID: ${params.id} no existe` },
-      { status: 404 }
+      { status: 404 },
     );
   }
   return NextResponse.json(todoId);

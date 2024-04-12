@@ -3,7 +3,7 @@ export const revalidate = 0;
 
 import { getServerSession } from "@/app/auth/actions/auth-actions";
 import prisma from "@/app/lib/prisma";
-import { NewTodo, TodosGrids } from "@/todos";
+import { NewTodoClient, TodosGrids } from "@/todos";
 import { redirect } from "next/navigation";
 
 export const metadata = {
@@ -22,11 +22,11 @@ export default async function RestTodosPage() {
     where: { userId: user.id },
     orderBy: { description: "asc" },
   });
-  
+
   return (
     <div>
       <div className="mx-5 mb-5 w-full px-3">
-        <NewTodo />
+        <NewTodoClient />
       </div>
       <TodosGrids todos={todos} />
     </div>

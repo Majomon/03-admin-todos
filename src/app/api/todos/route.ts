@@ -1,4 +1,5 @@
 // rag
+import { getServerSession } from "@/app/auth/actions/auth-actions";
 import prisma from "@/app/lib/prisma";
 import { NextResponse } from "next/server";
 import * as yup from "yup";
@@ -13,14 +14,14 @@ export async function GET(request: Request) {
   if (isNaN(+take)) {
     return NextResponse.json(
       { message: "Take tiene que ser un número" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
   if (isNaN(+skip)) {
     return NextResponse.json(
       { message: "Skip tiene que ser un número" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -42,13 +43,21 @@ const postSchema = yup.object({
 });
 
 export async function POST(request: Request) {
+  const user = await getServerSession();
+
+  if (!user) {
+    return NextResponse.json("No autorizado", { status: 401 });
+  }
+
   try {
     // const body = await postSchema.validate(await request.json());
     const { complete, description } = await postSchema.validate(
-      await request.json()
+      await request.json(),
     );
 
-    const todo = await prisma.todo.create({ data: { complete, description } });
+    const todo = await prisma.todo.create({
+      data: { complete, description, userId: user.id },
+    });
     return NextResponse.json(todo);
   } catch (error) {
     return NextResponse.json(error, { status: 400 });
@@ -57,8 +66,16 @@ export async function POST(request: Request) {
 
 /* DELETE */
 export async function DELETE(request: Request) {
+  const user = await getServerSession();
+
+  if (!user) {
+    return NextResponse.json("No autorizado", { status: 401 });
+  }
+  
   try {
-    await prisma.todo.deleteMany({ where: { complete: true } });
+    await prisma.todo.deleteMany({
+      where: { complete: true, userId: user.id },
+    });
     return NextResponse.json("Borrado");
   } catch (error) {
     return NextResponse.json(error, { status: 400 });

@@ -1,20 +1,25 @@
 "use client";
 import { FormEvent, useState } from "react";
 import { IoTrashOutline } from "react-icons/io5";
-// import * as todosApi from "@/todos/helpers/todos";
+import * as todosApi from "@/todos/helpers/todos";
 // import { useRouter } from "next/navigation";
 import { addTodo, deleteCompleted } from "../actions/todo-actions";
+import { useRouter } from "next/navigation";
 
-export const NewTodo = () => {
+export const NewTodoClient = () => {
+  const router = useRouter();
   const [description, setDescription] = useState("");
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (description.trim().length === 0) return;
 
-    await addTodo(description);
+    /* Servidor */
+    // await addTodo(description);
+    /* Cliente */
+    await todosApi.createTodo(description);
     setDescription("");
-    // router.refresh();
+    router.refresh();
   };
 
   // const deleteCompletedTodo = async () => {
@@ -28,13 +33,13 @@ export const NewTodo = () => {
         type="text"
         onChange={(e) => setDescription(e.target.value)}
         value={description}
-        className="w-6/12 -ml-10 pl-3 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-sky-500 transition-all"
+        className="-ml-10 w-6/12 rounded-lg border-2 border-gray-200 py-2 pl-3 pr-3 outline-none transition-all focus:border-sky-500"
         placeholder="¿Qué necesita ser hecho?"
       />
 
       <button
         type="submit"
-        className="flex items-center justify-center rounded ml-2 bg-sky-500 p-2 text-white hover:bg-sky-700 transition-all"
+        className="ml-2 flex items-center justify-center rounded bg-sky-500 p-2 text-white transition-all hover:bg-sky-700"
       >
         Crear
       </button>
@@ -44,7 +49,7 @@ export const NewTodo = () => {
       <button
         onClick={() => deleteCompleted()}
         type="button"
-        className="flex items-center justify-center rounded ml-2 bg-red-400 p-2 text-white hover:bg-red-700 transition-all"
+        className="ml-2 flex items-center justify-center rounded bg-red-400 p-2 text-white transition-all hover:bg-red-700"
       >
         <IoTrashOutline />
         <span className="ml-2"> Borrar completado</span>
